@@ -1,0 +1,40 @@
+{
+  "name": "game-of-life-node",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js --seed=./input",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danieloakman/Game-Of-Life-Node.git"
+  },
+  "author": "Daniel Oakman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danieloakman/Game-Of-Life-Node/issues"
+  },
+  "homepage": "https://github.com/danieloakman/Game-Of-Life-Node#readme",
+  "engines": {
+    "node": "^14.x.x"
+  },
+  "dependencies": {
+    "terminal-kit": "^1.42.0",
+    "yargs": "^15.4.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
+    "babel-eslint": "^10.0.3",
+    "camelcase-keys": "^6.1.0",
+    "eslint": "^6.6.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "lint-staged": "^9.4.2"
+  }
+}
