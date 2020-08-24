@@ -3,21 +3,24 @@
 const term = require('terminal-kit').terminal;
 const { argv } = require('yargs');
 const { readFileSync, existsSync } = require('fs');
-// const { promisify } = require('util');
+const CHARS = {
+  FULL_SQUARE: '\u2588',
+  CIRCLE: '\u26AB'
+};
 
 let map;
-let interval = 500;
-let iterations = -1; // default is infinite
+let tick = 500; // how many milliseconds till next tick
+let iterations = 0; // default is infinite
 
 // Get args:
-if (argv.seed) {
-  if (existsSync(argv.seed)) {
-    const file = readFileSync(argv.seed, { encoding: 'utf-8' });
+if (argv.s) { // Seed
+  if (existsSync(argv.s)) {
+    const file = readFileSync(argv.s, { encoding: 'utf-8' });
     map = file
       .split('\n')
       .map(line => line.split('').map(char => parseFloat(char)));
-  } else if (argv.seed.includes('rand')) {
-    const { 0: width, 1: height } = argv.seed
+  } else if (argv.s.includes('rand')) {
+    const { 0: width, 1: height } = argv.s
       .replace('rand', '')
       .split(',');
     map = new Array(parseFloat(height))
@@ -29,20 +32,20 @@ if (argv.seed) {
       });
   }
 }
-if (argv.interval) interval = argv.interval;
-if (argv.iterations) iterations = argv.iterations;
+if (argv.t) tick = argv.interval;
+if (argv.i) iterations = argv.iterations;
 
-/** @returns {Promise<{ x: number, y: number }>} Cursor position */
-function getCursorLocation () {
-  return new Promise(resolve => {
-    term.getCursorLocation((err, x, y) => {
-      if (err) {
-        console.error(err);
-        process.exit();
-      } else resolve({ x, y });
-    });
-  });
-}
+// /** @returns {Promise<{ x: number, y: number }>} Cursor position */
+// function getCursorLocation () {
+//   return new Promise(resolve => {
+//     term.getCursorLocation((err, x, y) => {
+//       if (err) {
+//         console.error(err);
+//         process.exit();
+//       } else resolve({ x, y });
+//     });
+//   });
+// }
 
 function getYAbove (y) {
   if (y > 0)
@@ -106,7 +109,7 @@ function determineCellState (x, y) {
     (!isAlive && numOfAliveNeighbours === 3);
 }
 
-async function draw () {
+function drawMap () {
   const updatedMap = [];
   for (let y = 0; y < map.length; y++) {
     updatedMap.push([]);
@@ -114,13 +117,18 @@ async function draw () {
       // Determine this cell's state next iteration:
       updatedMap[y][x] = determineCellState(x, y) ? 1 : 0;
 
-      term.moveTo(x, y);
-      // term('\u26AB'); // Circle
-      term.green(map[y][x] ? '\u2588' : ' '); // Full square
+      term.moveTo(x + 1, y + 1);
+      term.green(map[y][x] ? CHARS.FULL_SQUARE : ' ');
     }
   }
-  term('\n');
+  term(' ');
+  drawControls();
   map = updatedMap;
+}
+
+function drawControls () {
+  term.moveTo(0, map.length + 1)
+    .white(`-${tick}ms+`);
 }
 
 (async () => {
@@ -128,6 +136,8 @@ async function draw () {
   term.grabInput();
   term.on('key', function (key, matches, data) {
     if (key === 'CTRL_C') process.exit();
+    else if (key === '=') tick += 20;
+    else if (key === '-' && tick - 20 > 0) tick -= 20;
   });
 
   if (!map) {
@@ -135,11 +145,8 @@ async function draw () {
     process.exit();
   }
 
-  if (iterations > 0)
-    for (let i = 0; i < iterations; i++) {
-      await draw();
-      await new Promise(resolve => setTimeout(resolve, interval));
-    }
-  else
-    setInterval(draw, interval);
+  for (let i = 0; iterations ? i < iterations : true; i++) {
+    drawMap();
+    await new Promise(resolve => setTimeout(resolve, tick));
+  }
 })();
