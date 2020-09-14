@@ -32,8 +32,8 @@ if (argv.s) { // Seed
       });
   }
 }
-if (argv.t) tick = argv.interval;
-if (argv.i) iterations = argv.iterations;
+if (argv.t) tick = argv.t;
+if (argv.i) iterations = argv.i;
 
 // /** @returns {Promise<{ x: number, y: number }>} Cursor position */
 // function getCursorLocation () {
@@ -128,7 +128,7 @@ function drawMap () {
 
 function drawControls () {
   term.moveTo(0, map.length + 1)
-    .white(`-${tick}ms+`);
+    .white(`-${tick}ms+             `);
 }
 
 (async () => {
