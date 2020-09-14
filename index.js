@@ -11,6 +11,8 @@ const CHARS = {
 let map;
 let tick = 500; // how many milliseconds till next tick
 let iterations = 0; // default is infinite
+let live = [2, 3];
+let dead = [3, 3];
 
 // Get args:
 if (argv.s) { // Seed
@@ -34,6 +36,8 @@ if (argv.s) { // Seed
 }
 if (argv.t) tick = argv.t;
 if (argv.i) iterations = argv.i;
+if (argv.l) live = argv.l.split(',');
+if (argv.d) dead = argv.d.split(',');
 
 // /** @returns {Promise<{ x: number, y: number }>} Cursor position */
 // function getCursorLocation () {
@@ -101,12 +105,12 @@ function determineCellState (x, y) {
 
   for (const neighbour of getNeighbours(x, y)) {
     numOfAliveNeighbours += neighbour() ? 1 : 0;
-    if (isAlive && numOfAliveNeighbours > 3)
+    if (isAlive && numOfAliveNeighbours > live[1])
       return false;
   }
 
-  return (isAlive && (numOfAliveNeighbours === 2 || numOfAliveNeighbours === 3)) ||
-    (!isAlive && numOfAliveNeighbours === 3);
+  return (isAlive && numOfAliveNeighbours >= live[0] && numOfAliveNeighbours <= live[1]) ||
+    (!isAlive && numOfAliveNeighbours >= dead[0] && numOfAliveNeighbours <= dead[1]);
 }
 
 function drawMap () {
