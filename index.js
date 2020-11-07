@@ -139,7 +139,7 @@ function drawControls () {
   term.clear();
   term.grabInput();
   term.on('key', function (key, matches, data) {
-    if (key === 'CTRL_C') process.exit();
+    if (key === 'CTRL_C' || key === 'ESCAPE') process.exit();
     else if (key === '=') tick += 20;
     else if (key === '-' && tick - 20 > 0) tick -= 20;
   });
