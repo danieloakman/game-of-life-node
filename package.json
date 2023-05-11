@@ -17,13 +17,6 @@
     "url": "https://github.com/danieloakman/Game-Of-Life-Node/issues"
   },
   "homepage": "https://github.com/danieloakman/Game-Of-Life-Node#readme",
-  "engines": {
-    "node": "^14.x.x"
-  },
-  "dependencies": {
-    "terminal-kit": "^1.42.0",
-    "yargs": "^15.4.1"
-  },
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/preset-env": "^7.7.1",
@@ -35,6 +28,8 @@
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "lint-staged": "^9.4.2"
+    "lint-staged": "^9.4.2",
+    "terminal-kit": "^1.42.0",
+    "yargs": "^15.4.1"
   }
 }
