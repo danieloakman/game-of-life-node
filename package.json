@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js --s=rand20,20 --t=500",
+    "test": "node index.js -s=rand20,20 -t=500",
     "lint": "eslint ."
   },
   "repository": {
