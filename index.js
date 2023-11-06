@@ -79,17 +79,15 @@ function getXLeft (x) {
     return map[0].length - 1;
 }
 
-function getNeighbours (x, y) {
-  return [
-    () => map[getYAbove(y)][getXLeft(x)], // Above left
-    () => map[getYAbove(y)][x], // Above
-    () => map[getYAbove(y)][getXRight(x)], // Above right
-    () => map[y][getXLeft(x)], // Left
-    () => map[y][getXRight(x)], // Right
-    () => map[getYBelow(y)][getXLeft(x)], // Below left
-    () => map[getYBelow(y)][x], // Below
-    () => map[getYBelow(y)][getXRight(x)] // Below right
-  ];
+function * getNeighbours (x, y) {
+  yield map[getYAbove(y)][getXLeft(x)]; // Above left
+  yield map[getYAbove(y)][x]; // Above
+  yield map[getYAbove(y)][getXRight(x)]; // Above right
+  yield map[y][getXLeft(x)]; // Left
+  yield map[y][getXRight(x)]; // Right
+  yield map[getYBelow(y)][getXLeft(x)]; // Below left
+  yield map[getYBelow(y)][x]; // Below
+  yield map[getYBelow(y)][getXRight(x)]; // Below right
 }
 
 /**
@@ -104,7 +102,7 @@ function determineCellState (x, y) {
   let numOfAliveNeighbours = 0;
 
   for (const neighbour of getNeighbours(x, y)) {
-    numOfAliveNeighbours += neighbour() ? 1 : 0;
+    numOfAliveNeighbours += neighbour ? 1 : 0;
     if (isAlive && numOfAliveNeighbours > live[1])
       return false;
   }
